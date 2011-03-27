@@ -12,7 +12,6 @@ var web_win = Titanium.UI.createWindow({
     backgroundColor:'#fff',
     url: 'web.js'
 });
-web_win.hideNavBar();
 
 var tab = Titanium.UI.createTab({  
     icon:'KS_nav_views.png',
@@ -20,11 +19,41 @@ var tab = Titanium.UI.createTab({
     window:web_win
 });
 
-//
-//  add tabs
-//
+web_win.hideNavBar();
 web_win.hideTabBar();
-tabGroup.addTab(tab);  
+tabGroup.addTab(tab);
 
-// open tab group
-tabGroup.open();
+function init(){
+  if(Titanium.Network.networkType == Titanium.Network.NETWORK_NONE){
+    var alertDialog = Titanium.UI.createAlertDialog({
+      title: 'エラー',
+      message: 'インターネットに接続できません。ネットワークに接続できる環境で起動してください。',
+      buttonNames: ['OK']
+    });
+    alertDialog.show();
+  } else {
+    // open tab group
+    tabGroup.open();
+  }
+}
+
+function isiOS4Plus(){
+  if (Titanium.Platform.name == 'iPhone OS'){
+    var version = Titanium.Platform.version.split(".");
+    var major = parseInt(version[0]);
+    // can only test this support on a 3.2+ device
+    if (major >= 4){
+      return true;
+    }
+  }
+  return false;
+}
+
+if (isiOS4Plus()){ 
+  Titanium.App.addEventListener('resume',function(e){
+    //check for network
+    init();
+	});
+}
+
+init();

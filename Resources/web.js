@@ -2,6 +2,7 @@ var win = Titanium.UI.currentWindow;
 
 var web = Ti.UI.createWebView();
 var home_url = "http://teiden.dumdee.com/";
+
 web.url = home_url;
 
 var backButton = Ti.UI.createButton({
